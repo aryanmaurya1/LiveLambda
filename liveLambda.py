@@ -1,3 +1,5 @@
+import json
+
 class LiveLambda:
   def __init__(self):
     self.__action_dict = dict({ "POST" : {}, "GET" : {}, "PUT" : {},"DELETE" : {} ,"ANY" : {}, "PATCH" : {} })
@@ -18,6 +20,11 @@ class LiveLambda:
   
   def set_database_config(self, config):
     self.__database_config = config
+
+  def set_database_config_json(self, path):
+    with open(path) as fp:
+      config = json.load(fp)
+      self.set_database_config(config)
 
   def get_cursor(self):
     if self.__database_config["engine"] == "mysql":
