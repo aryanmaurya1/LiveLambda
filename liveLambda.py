@@ -55,7 +55,10 @@ class LiveLambda:
 
   def run(self, event, context):
     self.__event = event
-    request = {"headers" : event["headers"],"http" : event["requestContext"]["http"], "body" : event["body"]}
+    body = {}
+    if "data" in event["body"].keys():
+      body =  event["body"]["data"]
+    request = {"headers" : event["headers"],"requestContext" : event["requestContext"], "body" : body}
     try:
       request["queryStringParameters"] = event["queryStringParameters"]
     except KeyError:
