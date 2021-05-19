@@ -1,4 +1,4 @@
-from liveLambda_v2 import LiveLambdaV2, request, response
+from liveLambda_v2 import LiveLambdaV2
 
 app = LiveLambdaV2()
 
@@ -22,4 +22,6 @@ def f():
 def f2():
   pass
 
-app.run()
+
+from dummy_event import dummy_event
+app.run(dummy_event, {})

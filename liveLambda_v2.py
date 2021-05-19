@@ -1,80 +1,63 @@
 import json
 
-request = {}
-response = {}
-
-class Route_level:
-  def __init__(self):
-    self.type = None
-    self.handler_dict = { "POST" : {}, "GET" : {}, "PUT" : {},"DELETE" : {} ,"ANY" : {}, "PATCH" : {} }
-    self.current_level_str_value = None
-    self.sub_route_level = None
-
-  def __repr__(self):
-    return "{ TYPE: " + str(self.type) + " " + str(self.handler_dict) + " " + self.current_level_str_value + " SUB_LEVEL: "+ str(self.sub_route_level) + " }"
-
-
 class Request:
   def __init__(self):
       self.request_context = {}
       self.headers = {}
       self.body = {}
+      self.pathParameters = None
+      self.queryStringParameters = None
+      self.mics = {}
+
+  def __repr__(self):
+      line = "Request Context: "+ str(self.request_context) + "\n" + "Request Headers: " + str(self.headers) + "\n"
+      line = line + "Body: " + str(self.body) + "\n" + "Path Parameters: " + str(self.pathParameters) + "\n"
+      line = line + "Query Params: " + str(self.queryStringParameters) + "\n" + "Mics: " + str(self.mics) + "\n"
+      return line
+
+class Response:
+  def __init__(self):
+      self.body = {}
+      self.headers = {}
+  def get_dict(self):
+    return {"body" : self.body, "header": self.headers}
 
 class LiveLambdaV2:
   def __init__(self):
-    """
-      __route_dict = { method: {node}} 
-    """
-    # Redesign route dict starting from the base path 
-    self.__route_dict = dict({})
+    self.__route_dict = { "POST" : {}, "GET" : {}, "PUT" : {},"DELETE" : {} ,"ANY" : {}, "PATCH" : {} }
     self.__app_config = {}
     self.__event = None
+    self.request = {}
+    self.response = {}
   
-  def register_route(self, route_list, methods, handler):
-    print(route_list," " * (50 - len(str(route_list))), methods, " " * (40 - len(str(methods))) ,handler)
-    # This method registers a route in __route_dict
-    # if len(route_list) == 1:
-    #   route_level = Route_level()
-    #   route_level.type = "path" 
-    #   for method in methods:
-    #     route_level.handler_dict[method] = handler
-    #   route_level.current_level_str_value = "/"
+  def register_route(self, route, methods, handler):
+    # print(route," " * (50 - len(str(route))), methods, " " * (40 - len(str(methods))) ,handler)
+    for method in methods:
+      self.__route_dict[method][route] = handler
 
-    #   self.__route_dict[route_list[0]] = route_level
-  
-    # print("Route Dict", self.__route_dict)
 
   def route(self, route, method):
-    route_list = []
-    if not route == "/":
-      # removing trailing "/" if present
-      if route[-1] == "/":
-        route = route[:-1]
-
-      # removing leading "/" if present
-      if route[0] == "/":
-        route = route[1:]
-
-      route_list = route.split("/")
-
-      # again adding ["/"] as starting path in route_list
-      route_list = ["/"] + route_list
-    else:
-      # Handling root path separately 
-      route_list = ["/"]
-
     isMethodList = type(method) == type([])
     if not isMethodList:
       # If there is a single method, then converting it into list of method.
       method = [method]
 
     def wrapper(handler):
-      # populate route dict using a recursive function 
-      self.register_route(route_list=route_list, methods=method, handler=handler)
-
+      self.register_route(route=route, methods=method, handler=handler)
     return wrapper
 
-  def run(self):
-    for x in self.__route_dict.keys():
-      print(x, self.__route_dict[x])
-      print("-" * 20)
+  def run(self, event, context):
+
+    self.request = Request()
+    self.response = Response()
+
+    # Setup request object 
+    self.request.request_context = event["requestContext"]
+    self.request.headers = event["headers"]
+    self.request.body = json.loads(event["body"]) if "body" in event.keys() else {}
+    self.request.pathParameters = event["pathParameters"] if "pathParameters" in event.keys() else None
+    self.request.queryStringParameters = event["queryStringParameters"] if "queryStringParameters" in event.keys() else None
+    self.request.mics = {"version" : event["version"], "routeKey" : event["routeKey"], "rawPath" : event["rawPath"], "rawQueryString" : event["rawQueryString"], "isBase64Encoded" : event["isBase64Encoded"]} 
+
+    # Call appropriate handler
+    method, route = event["routeKey"].split()
