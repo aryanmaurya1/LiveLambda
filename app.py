@@ -35,7 +35,8 @@ def lambda_handler(event, context):
   use_dummy_event = True
   if lambdaTesting:
     event = dummy_event
-  print(app.run(event, context))
+  response = app.run(event, context)
+  return response
 
 if localTesting:
   lambda_handler(dummy_event, {})
