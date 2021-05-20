@@ -1,34 +1,36 @@
-import json
-import liveLambda
+from liveLambda_v2 import LiveLambdaV2
 
-app = liveLambda.LiveLambda();
+app = LiveLambdaV2()
+
+@app.route("/", "GET")
+def f1():
+  pass
+
+@app.route("/", "POST")
+def f2():
+  pass
+
+@app.route("/user", "POST")
+def f3():
+  pass
+
+@app.route("/user", "GET")
+def f4():
+  pass
 
 
-endpoint = "database-lambda.cjqf0qtlraak.ap-south-1.rds.amazonaws.com"
-db = {"engine" : "mysql", "username" : "admin", "password" : "stackprolambdadb", "database" : "lambda", "url" : endpoint}
+@app.route("/user/{id}", "POST")
+def f4():
+  pass
 
-app.set_database_config(db)
+@app.route("/user/{id}", "GET")
+def f5():
+  pass
 
-
-def f1(request, response, cursor=None):
-  response["body"] = {"function" : "f1", "method" : "GET"}
-  return response
-
-def f2(request, response, cursor=None):
-  return {"function" : "f2", "method" : "POST"}
-  
-
-def f3(request, response, cursor=None):
-  return {"function" : "f3", "method" : "PUT"}
-  
-
-# app.add_route(action, method, controller, db_required)
-app.add_action("/", "GET", f1, db_required=True)
-app.add_action("/", "POST", f2, db_required=True)
-app.add_action("/", "PUT", f3, db_required=True)
-
-print(app.get_action_dict())
-
+from dummy_event import dummy_event
 
 def lambda_handler(event, context):
-  return json.dumps(app.run(event, context))
+  testing = False
+  if testing:
+    event = dummy_event
+  app.run(event, context)

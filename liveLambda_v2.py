@@ -31,7 +31,7 @@ class LiveLambdaV2:
     self.response = {}
   
   def register_route(self, route, methods, handler):
-    # print(route," " * (50 - len(str(route))), methods, " " * (40 - len(str(methods))) ,handler)
+    print(route," " * (50 - len(str(route))), methods, " " * (40 - len(str(methods))) ,handler)
     for method in methods:
       self.__route_dict[method][route] = handler
 
@@ -44,7 +44,18 @@ class LiveLambdaV2:
 
     def wrapper(handler):
       self.register_route(route=route, methods=method, handler=handler)
+      return handler
     return wrapper
+
+  def generate_route_keys(self):
+    full_paths = []
+    for method in self.__route_dict.keys():
+      for route in self.__route_dict[method]:
+        p = method + " " + route
+        full_paths.append(p)
+    return full_paths
+
+
 
   def run(self, event, context):
 
@@ -54,9 +65,22 @@ class LiveLambdaV2:
     # Setup request object 
     self.request.request_context = event["requestContext"]
     self.request.headers = event["headers"]
-    self.request.body = json.loads(event["body"]) if "body" in event.keys() else {}
-    self.request.pathParameters = event["pathParameters"] if "pathParameters" in event.keys() else None
-    self.request.queryStringParameters = event["queryStringParameters"] if "queryStringParameters" in event.keys() else None
+
+    if "body" in event.keys():
+      self.request.body = json.loads(event["body"])
+    else:
+      self.request.body =  {}
+
+    if "pathParameters" in event.keys():
+      self.request.pathParameters = event["pathParameters"]
+    else:
+      self.request.pathParameters = {}
+
+    if "queryStringParameters" in event.keys():
+      self.request.queryStringParameters = event["queryStringParameters"]
+    else:
+      self.request.queryStringParameters = {}
+
     self.request.mics = {"version" : event["version"], "routeKey" : event["routeKey"], "rawPath" : event["rawPath"], "rawQueryString" : event["rawQueryString"], "isBase64Encoded" : event["isBase64Encoded"]} 
 
     # Call appropriate handler
