@@ -31,7 +31,7 @@ class LiveLambdaV2:
     self.response = {}
   
   def register_route(self, route, methods, handler):
-    print(route," " * (50 - len(str(route))), methods, " " * (40 - len(str(methods))) ,handler)
+    # print(route," " * (50 - len(str(route))), methods, " " * (40 - len(str(methods))) ,handler)
     for method in methods:
       self.__route_dict[method][route] = handler
 
@@ -56,6 +56,16 @@ class LiveLambdaV2:
     return full_paths
 
 
+  def get_param_name(self, route):
+    start = None
+    end = None
+    for i in range(len(route)):
+      if route[i] == "{":
+        start = i
+      if route[i] == "}":
+        end = i
+        break
+    return route[start+1 : end]
 
   def run(self, event, context):
 
@@ -85,3 +95,11 @@ class LiveLambdaV2:
 
     # Call appropriate handler
     method, route = event["routeKey"].split()
+    handler = self.__route_dict[method][route]
+    if "pathParameters" in event.keys():
+      param_name = self.get_param_name(route)
+      response = handler(event["pathParameters"][param_name])
+    else:
+      response = handler()
+
+    return response
