@@ -1,15 +1,16 @@
 from logging import Handler
 import boto3
 import base64
+from datetime import datetime
 from app import app
 
 #### Constants ###
 
 file_path = "./liveLambda.zip"
 lambda_role_arn = 'arn:aws:iam::734310663973:role/lambda_role'
-function_name = "writups_central_api_v2"
+function_name = "writups_central_api_v2_final_testing"
 handler_function = 'app.lambda_handler'
-api_name = "final_deployment"
+api_name = "final_deployment_for_testing"
 
 
 
@@ -35,6 +36,15 @@ lambda_function_arn = deployed_function["FunctionArn"]
 
 print(f"[{step}] : Lambda Creation Done.")
 print(f"Lambda function ARN : {lambda_function_arn}")
+
+#### Ataching Resource Based Permissions to lambda
+step = step + 1
+print(f"[{step}] : Attaching Resource Based Permission.")
+statement_id = str(datetime.now().timestamp())
+statement_id = statement_id.replace(".", "-")
+lambda_client.add_permission(FunctionName=function_name, Principal="apigateway.amazonaws.com", Action="lambda:InvokeFunction",StatementId=statement_id)
+print(f"[{step}] : Attached Resource Based Permission.")
+print(f"Statement Id : {statement_id}")
 
 
 #### AWS API Gateway Part
