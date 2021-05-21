@@ -1,16 +1,22 @@
-from logging import Handler
 import boto3
-import base64
+import json
 from datetime import datetime
 from app import app
 
-#### Constants ###
+#### Reading Config file
 
-file_path = "./liveLambda.zip"
-lambda_role_arn = 'arn:aws:iam::734310663973:role/lambda_role'
-function_name = "writups_central_api_v2_final_testing"
-handler_function = 'app.lambda_handler'
-api_name = "final_deployment_for_testing"
+config_file = open("./config.json", 'r')
+config_data = config_file.read()
+config_data = json.loads(config_data)
+config_file.close()
+
+#### Global Configuration ###
+
+file_path = config_data["file_path"]
+lambda_role_arn = config_data["lambda_role_arn"]
+function_name = config_data["function_name"]
+handler_function = config_data["handler_function"]
+api_name = config_data["api_name"]
 
 
 
