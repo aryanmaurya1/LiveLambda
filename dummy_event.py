@@ -1,6 +1,9 @@
-dummy_event = {
+domain_name = ""
+domain_prefix = ""
+
+dummy_event_template = {
     "version": "2.0",
-    "routeKey": "GET /user/{id}",
+    "routeKey": "GET /user/48578547",
     "rawPath": "/testing/user/2",
     "rawQueryString": "",
     "headers": {
@@ -8,7 +11,7 @@ dummy_event = {
       "content-length": "31",
       "content-type": "application/json",
       "host": "api.writups.tech",
-      "user-agent": "insomnia/2021.1.0",
+      "user-agent": "Dummy Event",
       "x-amzn-trace-id": "Root=1-60a4c716-1c1a3cf77daa2a9473d2fdd8",
       "x-forwarded-for": "1.23.143.231",
       "x-forwarded-port": "443",
@@ -37,12 +40,21 @@ dummy_event = {
     },
     "body": "{\"name\":\"John\",\"surname\":\"Doe\"}",
     "isBase64Encoded": False,
-  "BODY_TYPE": "<class 'str'>",
-  "EVENT_TYPE": "<class 'dict'>",
-  "ONLY_BODY": "{\"name\":\"John\",\"surname\":\"Doe\"}",
-  "DICT_BODY": {
-    "name": "John",
-    "surname": "Doe"
-  },
-  "TYPE_OF_DICT_BODY": "<class 'dict'>"
 }
+
+class Test():
+  def __init__(self):
+    self.path = ""
+    self.method = "GET"
+    self.pathParameters = None
+    self.queryStringParameters = None
+
+class DummyEvent():
+  def __init__(self, app):
+    self.version = "2.0"
+    self.stage = "default"
+    self.base = ""
+    self.tests = []
+
+  def generate_test_request(test):
+    pass

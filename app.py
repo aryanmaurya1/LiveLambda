@@ -2,7 +2,7 @@ from liveLambda_v2 import LiveLambdaV2
 
 app = LiveLambdaV2()
 
-localTesting = False
+localTesting = True
 lambdaTesting = False
 
 @app.route("/", "GET")
@@ -29,14 +29,12 @@ def f4(id):
 def f5(id):
   return {"key" : str(app.request), "route" : "GET /user/" + str(id)}
 
-from dummy_event import dummy_event
+from dummy_event import Dummy_event, dummy_event_template
 
 def lambda_handler(event, context):
-  use_dummy_event = True
-  if lambdaTesting:
-    event = dummy_event
   response = app.run(event, context)
+  print(response)
   return response
 
 if localTesting:
-  lambda_handler(dummy_event, {})
+  lambda_handler(dummy_event_template, {})
