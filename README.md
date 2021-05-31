@@ -63,3 +63,6 @@ def lambda_handler(event, context):
 ```
 * Run ``deploy.py`` file. 
 * your ``config.json`` and ``deploy.py`` should be in same folder.
+=======
+# liveLambda
+A library for building backends using AWS Lambda.
