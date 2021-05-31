@@ -26,14 +26,14 @@ def postIndex():
 # Route with url parameters.
 
 @app.route("/user/{id}", "POST")
-def f3(id):
+def routeWithParam(id):
   return {"page" : str(app.request), "route" : "POST /user/{id}"}
 
 
 # Route with multiple methods attached to it.
 
 @app.route("/dynamic", ["GET", "POST", "PUT", "PATCH", "DELETE"])
-def f4():
+def routeWithMultipleMethods():
   return {"key" : str(app.request), "route" : "GET /user"}
 
 # Your source file must containe a method which lambda runtime will invoke.
@@ -63,6 +63,3 @@ def lambda_handler(event, context):
 ```
 * Run ``deploy.py`` file. 
 * your ``config.json`` and ``deploy.py`` should be in same folder.
-=======
-# liveLambda
-A library for building backends using AWS Lambda.
