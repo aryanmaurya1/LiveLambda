@@ -47,11 +47,7 @@ def lambda_handler(event, context):
 
 ## Deployment
 
-### Instructions
-* Your source code must contain a ``config.json`` file which will contains deployment configuration and 'arn' of the role used by the AWS lambda to push the logs at AWS cloudwatch.
-
-* Make a single `.zip` file containing` LiveLambda.py`, `<your_source_code>.py`, and `all_libraries_you_use(files and folders)` .
-### Sample ``config.json``
+### Format of ``config.json`` file 
 ```
 {
   "file_path": "<path_to_zip_file>",
@@ -61,7 +57,12 @@ def lambda_handler(event, context):
   "api_name": "<cloudwatch_api_name>"
 }
 ```
+
+### Instructions
+* Your source code must contain a ``config.json`` file which will contains deployment configuration and 'arn' of the role used by the AWS lambda to push the logs at AWS cloudwatch.
+
+* Make a single `.zip` file containing` LiveLambda.py`, `<your_source_code>.py`, and `all_libraries_you_use(files and folders)` .
 * your ``config.json`` and ``deploy.py`` should be in same folder.
 * Run ``deploy.py`` file. 
 
-You will see messages on the terminal indicating the status of each stage. If all goes successful API base URL will be printed on terminal after completion of last stage.
+  You will see messages on the terminal indicating the status of each stage. If all goes successful API base URL will be printed on terminal after completion of last stage.
