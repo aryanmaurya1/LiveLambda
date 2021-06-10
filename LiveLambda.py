@@ -2,7 +2,7 @@ import json
 
 class Request:
   # Base class for a request object. Every request object comming from API gateway is transformed internally into 
-  # LiveLambdaV2's internal request object. 
+  # LiveLambda's internal request object. 
   # REQUEST (API GATEWAY) --> REQUEST (LiveLambda)
   
   def __init__(self):
@@ -26,9 +26,9 @@ class Response:
   def get_dict(self):
     return {"body" : self.body, "header": self.headers}
 
-class LiveLambdaV2:
+class LiveLambda:
   # Main class which handles the flow from registering handler functions to calling them on correct routes.
-  # Evey LiveLambdaV2 webapp must contain atleast one object of this class.
+  # Evey LiveLambda webapp must contain atleast one object of this class.
 
   def __init__(self):
     self.__route_dict = { "POST" : {}, "GET" : {}, "PUT" : {},"DELETE" : {} ,"ANY" : {}, "PATCH" : {} }
@@ -39,7 +39,7 @@ class LiveLambdaV2:
   
   def register_route(self, route, methods, handler):
     # Internal method, should not be used directly. Instead use @app.route() decorator to register handler functions.
-    # Here 'app' refers to a LiveLambdaV2 Object.
+    # Here 'app' refers to a LiveLambda Object.
     # @route:string -> Endpoint  for which to register handler. 
     # @methods:list -> List of methods for which hanlder should be registered to a given route.
     # @handler:function -> Handler function to register.
@@ -68,7 +68,7 @@ class LiveLambdaV2:
     return wrapper
 
   def generate_route_keys(self):
-    # Returns a list of all routes registered with an particular LiveLambdaV2 object.
+    # Returns a list of all routes registered with an particular LiveLambda object.
 
     full_paths = []
     for method in self.__route_dict.keys():
