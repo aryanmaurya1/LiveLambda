@@ -63,3 +63,5 @@ def lambda_handler(event, context):
 ```
 * your ``config.json`` and ``deploy.py`` should be in same folder.
 * Run ``deploy.py`` file. 
+
+You will see messages on the terminal indicating the status of each stage. If all goes successful API base URL will be printed on terminal after completion of last stage.
