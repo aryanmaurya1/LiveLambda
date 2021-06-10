@@ -4,14 +4,14 @@ A libray for building backends using AWS Lambda.
 ## Make Your Servers Serverless 🤓
 
 ### Instructions
-* liveLambda_v2.py and you ``<source_file>`` should be in same directory.
-* Import ``LiveLambdaV2`` class from ``liveLambda_v2.py`` file.
+* `LiveLambda.py` and you ``<source_file>`` should be in same directory.
+* Import ``LiveLambda`` class from ``LiveLambda.py`` file.
 ### Example
 
 ```
-from liveLambda_v2 import LiveLambdaV2
+from LiveLambda import LiveLambda
 
-app = LiveLambdaV2()
+app = LiveLambda()
 
 # Route with a single method attached to it.
 
@@ -50,7 +50,7 @@ def lambda_handler(event, context):
 ### Instructions
 * Your source code must contain a ``config.json`` file which will contains deployment configuration and 'arn' of the role used by the AWS lambda to push the logs at AWS cloudwatch.
 
-* Make a single `.zip` file containing` liveLambda_v2.py`, `<your_source_code>.py`, and `all_libraries_you_use(files and folders)` .
+* Make a single `.zip` file containing` LiveLambda.py`, `<your_source_code>.py`, and `all_libraries_you_use(files and folders)` .
 ### Sample ``config.json``
 ```
 {
@@ -61,5 +61,5 @@ def lambda_handler(event, context):
   "api_name": "<cloudwatch_api_name>"
 }
 ```
-* Run ``deploy.py`` file. 
 * your ``config.json`` and ``deploy.py`` should be in same folder.
+* Run ``deploy.py`` file. 
