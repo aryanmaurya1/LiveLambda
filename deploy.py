@@ -61,7 +61,6 @@ print(f"[{step}] : Generation of Route Key List done.")
 print(route_key_list)
 step = step + 1
 
-role_arn = "arn:aws:iam::734310663973:role/api_gateway_role"
 api_gateway_client = boto3.client('apigatewayv2')
 
 print(f"[{step}] : Creating Base API.")
