@@ -36,8 +36,10 @@ print(f"[{step}] : Creating Lambda")
 
 lambda_client = boto3.client('lambda')
 file = open(file_path, 'rb')
-file = file.read()
-deployed_function = lambda_client.create_function(FunctionName=function_name, Runtime='python3.8', Role=lambda_role_arn, Handler=handler_function, Code={'ZipFile' : file}, Publish=True, PackageType='Zip')
+binary_data = file.read()
+file.close()
+
+deployed_function = lambda_client.create_function(FunctionName=function_name, Runtime='python3.8', Role=lambda_role_arn, Handler=handler_function, Code={'ZipFile' : binary_data}, Publish=True, PackageType='Zip')
 lambda_function_arn = deployed_function["FunctionArn"]
 
 print(f"[{step}] : Lambda Creation Done.")
