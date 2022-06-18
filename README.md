@@ -10,6 +10,7 @@ A libray for building backends using AWS Lambda.
     * Windows : `pip install boto3`
 * AWS CLI should be installed and user identity and region should be configured properly.
     * <a href="https://aws.amazon.com/cli/">Here</a> is a link to AWS official documentation on installing and configuring AWS CLI.
+    * An AWS role arn with ``AWSLambdaBasicExecutionRole``. To know more about how to create custom aws role <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html">click here</a>.
 ### Instructions
 * `LiveLambda.py` and you ``<source_file>`` should be in same directory.
 * Import ``LiveLambda`` class from ``LiveLambda.py`` file.
